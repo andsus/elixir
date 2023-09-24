@@ -103,4 +103,21 @@ defmodule KnapsackTest do
 
     assert Knapsack.maximum_value(items, maximum_weight) == 1458
   end
+
+  test "7 items - sample of manning advanced algorithms" do
+    items = [
+      %{value: 117800, weight: 20},
+      %{value: 1122000, weight: 300},
+      %{value: 1444000, weight: 400},
+      %{value: 130000, weight: 50},
+      %{value: 690000, weight: 300},
+      %{value: 1501600, weight: 800},
+      %{value: 237000, weight: 300},
+    ]
+
+    maximum_weight = 1000
+
+    assert Knapsack.maximum_value(items, maximum_weight) == 3256000
+  end
+
 end

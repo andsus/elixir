@@ -1,7 +1,3 @@
-if !System.get_env("EXERCISM_TEST_EXAMPLES") do
-  Code.load_file("school.exs", __DIR__)
-end
-
 defmodule SchoolTest do
   use ExUnit.Case
 
@@ -12,7 +8,25 @@ defmodule SchoolTest do
     assert actual == %{2 => ["Aimee"]}
   end
 
-  @tag :pending
+  test "a student can only be added to the same grade once" do
+    actual =
+      @db
+      |> School.add("Aimee", 2)
+      |> School.add("Aimee", 2)
+
+    assert actual == %{2 => ["Aimee"]}
+  end
+
+  test "a student cannot be added to more than one grade" do
+    actual =
+      @db
+      |> School.add("Aimee", 2)
+      |> School.add("Aimee", 1)
+
+    assert actual == %{2 => ["Aimee"]}
+  end
+
+  # @tag :pending
   test "add more students in same class" do
     actual =
       @db
@@ -23,7 +37,7 @@ defmodule SchoolTest do
     assert Enum.sort(actual[2]) == ["Blair", "James", "Paul"]
   end
 
-  @tag :pending
+  # @tag :pending
   test "add students to different grades" do
     actual =
       @db
@@ -33,7 +47,7 @@ defmodule SchoolTest do
     assert actual == %{3 => ["Chelsea"], 7 => ["Logan"]}
   end
 
-  @tag :pending
+  # @tag :pending
   test "get students in a grade" do
     actual =
       @db
@@ -45,28 +59,46 @@ defmodule SchoolTest do
     assert Enum.sort(actual) == ["Bradley", "Franklin"]
   end
 
-  @tag :pending
+  # @tag :pending
   test "get students in a non existent grade" do
     assert [] == School.grade(@db, 1)
   end
 
-  @tag :pending
+  # @tag :pending
   test "sort school by grade and by student name" do
     actual =
       @db
-      |> School.add("Bart", 4)
-      |> School.add("Jennifer", 4)
-      |> School.add("Christopher", 4)
-      |> School.add("Kareem", 6)
-      |> School.add("Kyle", 3)
+      |> School.add("Peter", 2)
+      |> School.add("Anna", 1)
+      |> School.add("Barb", 1)
+      |> School.add("Zoe", 2)
+      |> School.add("Alex", 2)
+      |> School.add("Jim", 3)
+      |> School.add("Charlie", 1)
       |> School.sort()
 
     expected = [
-      {3, ["Kyle"]},
-      {4, ["Bart", "Christopher", "Jennifer"]},
-      {6, ["Kareem"]}
+      {1, ["Anna", "Barb", "Charlie"]},
+      {2, ["Alex", "Peter", "Zoe"]},
+      {3, ["Jim"]}
     ]
 
+    assert expected == actual
+  end
+
+  #@tag :pending
+  test "add same student again will move to latest added grade" do
+    actual =
+     @db
+       |> School.add("James", 2)
+       |> School.add("Blair", 2)
+       |> School.add("Paul", 2)
+       |> School.add("Blair", 3)
+       |> School.sort()
+
+    expected = [
+      {2, ["Blair", "James", "Paul"]}
+    ]
     assert expected == actual
   end
 end

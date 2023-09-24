@@ -2,7 +2,7 @@ defmodule RomanNumerals do
   @doc """
   Convert the number to a roman number.
   """
-  @romanlist [
+  @romanlist  = [
     {1000, "M"},
     {900, "CM"},
     {500, "D"},
@@ -19,13 +19,25 @@ defmodule RomanNumerals do
   ]
 
   @spec numeral(pos_integer) :: String.t()
-  def numeral(0) do "" end
-  def numeral(number) do
-    {num, rom} = Enum.find(@romanlist, fn {num, rom} ->
-      number >= num
-    end)
-    # Recursive / repeat e.g
-    # 621 : DCXXI. 21 - 10, then 11 - 10 thus 2 X's
-    rom <> numeral(number - num)
+  # def numeral(0) do "" end
+  # def numeral(number) do
+  #   {num, rom} = Enum.find(@romanlist, fn {num, rom} ->
+  #     number >= num
+  #   end)
+  #   # Recursive / repeat e.g
+  #   # 621 : DCXXI. 21 - 10, then 11 - 10 thus 2 X's
+  #   rom <> numeral(number - num)
+  # end
+
+  def numeral(number), do: do_numeral(number, "")
+
+  defp do_numeral(0, acc), do: acc
+
+  defp do_numeral(number, acc) do
+    {arabic, roman} =
+      @romanlist
+      |> Enum.find(fn {n, _} -> n <= number end)
+      do_numeral(number - arabic, acc <> roman)
   end
+
 end
