@@ -42,7 +42,7 @@ defmodule RationalNumbers do
   """
   @spec abs(a :: rational) :: rational
   def abs({a, b}) do
-    {Kernel.abs(a), Kernel.abs(b)} 
+    {Kernel.abs(a), Kernel.abs(b)}
     |> reduce
   end
 
@@ -75,6 +75,7 @@ defmodule RationalNumbers do
     {-a, -b}
     |> reduce
   end
+
   def reduce({a, b}) do
     gcd = Integer.gcd(a,b)
     { a / gcd,  b / gcd }
